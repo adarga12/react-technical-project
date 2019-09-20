@@ -19,6 +19,8 @@ class ViewOrders extends Component {
             .then(response => response.json())
             .then(response => {
                 if(response.success) {
+                    //TODO: On the initial load, the component isn't mounted (and thus the state can't be set), a warning is generated, 
+                    //      and this fails.  Subsequent calls seem to work.  Not sure why this is happening.
                     this.setState({ orders: response.orders });
                 } else {
                     console.log('Error getting orders');
@@ -27,12 +29,8 @@ class ViewOrders extends Component {
     }
 
     render() {
-        this.setState();
         let { token } = this.props.auth;
-        console.log ("Token: " + token); 
         if (token === null) {
-            console.log(this.props);
-            console.log("State is " + this.props.auth);
              return (
                 <Redirect to = {
                     {pathname: "/login"}
