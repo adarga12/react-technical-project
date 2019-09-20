@@ -5,8 +5,8 @@ import { Template } from '../../components';
 import { SERVER_IP } from '../../private';
 import './viewOrders.css';
 
-const EDIT_ORDER_URL = `${SERVER_IP}/api/edit-order`
-const DELETE_ORDER_URL = `${SERVER_IP}/api/delete-order`
+const EDIT_ORDER_URL = `${SERVER_IP}/api/edit-order`;
+const DELETE_ORDER_URL = `${SERVER_IP}/api/delete-order`;
 
 const mapStateToProps = (state) => ({
     auth: state.auth
@@ -109,4 +109,3 @@ class ViewOrders extends Component {
 }
 
 export default connect(mapStateToProps, null)(ViewOrders);
-//export default ViewOrders;
