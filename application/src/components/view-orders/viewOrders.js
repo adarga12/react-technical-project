@@ -5,6 +5,9 @@ import { Template } from '../../components';
 import { SERVER_IP } from '../../private';
 import './viewOrders.css';
 
+const EDIT_ORDER_URL = `${SERVER_IP}/api/edit-order`;
+const DELETE_ORDER_URL = `${SERVER_IP}/api/delete-order`;
+
 const mapStateToProps = (state) => ({
     auth: state.auth
 })
@@ -26,6 +29,44 @@ class ViewOrders extends Component {
                     console.log('Error getting orders');
                 }
             });
+    }
+
+    editOrder(event) {
+        event.preventDefault();
+        if (this.state.order_item === "") return;
+        fetch(EDIT_ORDER_URL, {
+            method: 'POST',
+            body: JSON.stringify({
+                order_item: this.state.order_item,
+                quantity: this.state.quantity,
+                ordered_by: this.props.auth.email || 'Unknown!',
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(response => console.log("Success", JSON.stringify(response)))
+        .catch(error => console.error(error));
+    }
+
+    deleteOrder(event, value) {
+        event.preventDefault();
+        if (this.state.order_item === "") return;
+        fetch(DELETE_ORDER_URL, {
+            method: 'POST',
+            body: JSON.stringify({
+                id: value
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(response => console.log("Success", JSON.stringify(response)))
+        .catch(error => console.error(error));
+
+        //TODO: This removes the order, but doesn't update the DOM.
     }
 
     render() {
@@ -55,8 +96,8 @@ class ViewOrders extends Component {
                                     <p>Quantity: {order.quantity}</p>
                                  </div>
                                  <div className="col-md-4 view-order-right-col">
-                                     <button className="btn btn-success">Edit</button>
-                                     <button className="btn btn-danger">Delete</button>
+                                     <button className="btn btn-success" onClick={(event) => this.editOrder(event)}>Edit</button>
+                                     <button className="btn btn-danger" onClick={(event) => this.deleteOrder(event, order._id)}>Delete</button>
                                  </div>
                             </div>
                         );
@@ -68,4 +109,3 @@ class ViewOrders extends Component {
 }
 
 export default connect(mapStateToProps, null)(ViewOrders);
-//export default ViewOrders;
