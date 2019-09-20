@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { Template } from '../../components';
 import { SERVER_IP } from '../../private';
 import './viewOrders.css';
+
+const mapStateToProps = (state) => ({
+    auth: state.auth
+})
 
 class ViewOrders extends Component {
     state = {
@@ -21,6 +27,20 @@ class ViewOrders extends Component {
     }
 
     render() {
+        this.setState();
+        let { token } = this.props.auth;
+        console.log ("Token: " + token); 
+        if (token === null) {
+            console.log(this.props);
+            console.log("State is " + this.props.auth);
+             return (
+                <Redirect to = {
+                    {pathname: "/login"}
+                }
+                />
+             );
+        }
+
         return (
             <Template>
                 <div className="container-fluid">
@@ -49,4 +69,5 @@ class ViewOrders extends Component {
     }
 }
 
-export default ViewOrders;
+export default connect(mapStateToProps, null)(ViewOrders);
+//export default ViewOrders;
