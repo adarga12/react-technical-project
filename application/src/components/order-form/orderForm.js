@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import { Template } from '../../components';
 import { connect } from 'react-redux';
 import { SERVER_IP } from '../../private';
@@ -47,6 +48,15 @@ class OrderForm extends Component {
     }
 
     render() {
+        let { token } = this.props.auth;
+        if (token === null) {
+             return (
+                <Redirect to = {
+                    {pathname: "/login"}
+                }
+                />
+             );
+        }
         return (
             <Template>
                 <div className="form-wrapper">
