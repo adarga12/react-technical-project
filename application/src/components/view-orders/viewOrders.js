@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { Template } from '../../components';
 import { SERVER_IP } from '../../private';
 import './viewOrders.css';
+
+const mapStateToProps = (state) => ({
+    auth: state.auth
+})
 
 class ViewOrders extends Component {
     state = {
@@ -13,6 +19,8 @@ class ViewOrders extends Component {
             .then(response => response.json())
             .then(response => {
                 if(response.success) {
+                    //TODO: On the initial load, the component isn't mounted (and thus the state can't be set), a warning is generated, 
+                    //      and this fails.  Subsequent calls seem to work.  Not sure why this is happening.
                     this.setState({ orders: response.orders });
                 } else {
                     console.log('Error getting orders');
@@ -21,6 +29,16 @@ class ViewOrders extends Component {
     }
 
     render() {
+        let { token } = this.props.auth;
+        if (token === null) {
+             return (
+                <Redirect to = {
+                    {pathname: "/login"}
+                }
+                />
+             );
+        }
+
         return (
             <Template>
                 <div className="container-fluid">
@@ -49,4 +67,5 @@ class ViewOrders extends Component {
     }
 }
 
-export default ViewOrders;
+export default connect(mapStateToProps, null)(ViewOrders);
+//export default ViewOrders;
